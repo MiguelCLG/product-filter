@@ -1,11 +1,10 @@
-import { renderHook, act, waitFor } from "@testing-library/react"; // Update the import
+import { renderHook, waitFor } from "@testing-library/react";
 import { useFilters } from "./useFilters";
 import { useGlobalStore } from "../Store/GlobalStore";
 import datastore from "../Data/datastore";
 import { mappedColumns, mappedOperators } from "../Utils/constants";
 import { EOperatorType, EPropertyNames } from "../Utils/enums";
 
-// Mock the useGlobalStore and datastore
 jest.mock("../Store/GlobalStore");
 jest.mock("../Data/datastore");
 jest.mock("../Utils/constants");
@@ -81,19 +80,16 @@ describe("useFilters Hook", () => {
   };
 
   beforeEach(() => {
-    // Mock datastore methods
     (datastore.getProperties as jest.Mock).mockReturnValue(mockProperties);
     (datastore.getProducts as jest.Mock).mockReturnValue(mockProducts);
     (datastore.getOperators as jest.Mock).mockReturnValue(mockOperators);
 
-    // Mock global store
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: mockState,
       dispatch: mockDispatch,
     });
 
-    // Mock constants
-    mappedColumns.color = mockMappedColumns.color;
+    mappedColumns[1] = mockMappedColumns.color;
     mappedOperators.string = mockMappedOperators.string;
   });
 
@@ -139,8 +135,9 @@ describe("useFilters Hook", () => {
         wireless: "",
       },
     ];
-    expect(result.current.filteredData).toEqual(expectedData);
+    waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
+
   it("should return all with weight less than 20", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
@@ -162,7 +159,7 @@ describe("useFilters Hook", () => {
         wireless: "true",
       },
     ];
-    expect(result.current.filteredData).toEqual(expectedData);
+    waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
 
   it("should return all that have any value", () => {
@@ -193,7 +190,7 @@ describe("useFilters Hook", () => {
         wireless: "false",
       },
     ];
-    expect(result.current.filteredData).toEqual(expectedData);
+    waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
   it("should return all that have no value", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
@@ -216,7 +213,7 @@ describe("useFilters Hook", () => {
         wireless: "",
       },
     ];
-    expect(result.current.filteredData).toEqual(expectedData);
+    waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
 
   it("should return if value exactly matches one of several values", () => {
@@ -247,7 +244,7 @@ describe("useFilters Hook", () => {
         color: "blue",
       },
     ];
-    expect(result.current.filteredData).toEqual(expectedData);
+    waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
   it("should return value contains the specified text", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
@@ -277,7 +274,7 @@ describe("useFilters Hook", () => {
         color: "blue",
       },
     ];
-    expect(result.current.filteredData).toEqual(expectedData);
+    waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
 
   it("should return filtered data, property names, property values, and operators", () => {

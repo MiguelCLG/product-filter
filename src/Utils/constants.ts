@@ -1,9 +1,9 @@
 export const mappedColumns = {
-  "Product Name": "productName",
-  color: "color",
-  "weight (oz)": "weight",
-  category: "category",
-  wireless: "wireless",
+  0: "productName",
+  1: "color",
+  2: "weight",
+  3: "category",
+  4: "wireless",
 };
 
 export const mappedOperators = {

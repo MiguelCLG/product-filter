@@ -1,6 +1,8 @@
-# Overview
+# Product Filter App
 
-The project relies on filtering a list of data with 2 types of filters and an operator. The filters are: Property names and Property values. The operator will be the relationship between the filter. Operators can be as described in the specification as such:
+## Overview
+
+This project focuses on filtering a list of data using two types of filters: **Property Names** and **Property Values**, along with an **Operator** that defines the relationship between the filters. The operators are:
 
 | Operator        | Description                                 |
 | --------------- | ------------------------------------------- |
@@ -25,83 +27,142 @@ The project relies on filtering a list of data with 2 types of filters and an op
 |               | Has any value   |
 |               | Has no value    |
 |               | Is any of       |
-| enumerated    | equals          |
+| enumerated    | Equals          |
 |               | Has any value   |
 |               | Has no value    |
 |               | Is any of       |
 
-## Data management
+## Data Management
 
-I believe a good way to store various types of filters is to store it in a global store. This will have the functionality of storing the filters of different types and return functions to apply filters and return the filtered data. Why global? We want to divide and conquer and have the components uncoupled from the main objects and avoid prop-drilling as it turns the code a bit more unreadable.
+We use a global store to manage filters. This keeps components independent and avoids prop-drilling, making the code more readable and maintainable. Filters are stored in the global state, and the filtered data is derived from it.
 
 ## Components
 
-Starting the project, I wanted to properly plan out what components we have to create and what their functions are.
-
 ### Property Names
 
-This component as shown in the mockups, is a dropdown with the options. We can use it to get the names from data store and when an option is selected, update the global store for the specific type of filters.
+A dropdown component that allows the user to select a property name to filter by. It pulls available property names from the global store and updates the store when a selection is made.
 
-- We can apply a default of "All" to show the whole list in the beggining.
-- Changing this filter will apply the current filters.
+- Default value: "-1" (shows the entire list initially). ( the value will be the property id, -1 is the default so we can display all products).
+- Changing the selection applies the filters.
 
 ### Operators
 
-This component is another dropdown, where we select the type of operator that we want to set for the filters. This will also be stored in the global store.
+A dropdown component that allows the user to select an operator for filtering. The selected operator is stored in the global store.
 
-- We can apply an "Any" default so we can show the whole list in the beggining.
-- Changing the operator will apply the current filters.
+- Default value: "Any" (shows the entire list initially).
+- Changing the operator applies the filters.
 
 ### Property Values
 
-This component will be a list with multiselect capabilities. As per the other ones, we save this list in the global store.
+A multiselect list with checkboxes that allows the user to select multiple property values to filter by. The selected values are stored in the global store.
 
-- When no values are selected we show them all
-- Selecting one value will apply the current filters
+- If no values are selected, all items are shown.
+- Selecting values applies the filters.
 
 ### Filtered List
 
-This component will be the list with the filtered data. We are going to get the data from the state of the global store and list it. For now we are going to create a simple table as per the mockups. If we have the time, we will change the design.
+Displays the filtered data based on the selected filters. The data is currently shown in a simple table, but we plan to move to a card-based layout for a better UI/UX experience.
 
 ### Clear Button
 
-This component will be a simple button that will reset the filters in the store and the components and re-render the list.
+A button that resets all filters in the global store, clearing the selected filters and re-rendering the default list.
 
 ## Testing
 
-I want to approach this issue with a TDD mindset. I want to create tests for a component, then implement the component. I think it will help accelarate the development and ensure the quality of the functionality at the same time.
-We will use unit tests for the filter components and an integration test for the whole list, testing a couple of Properties and Values (a couple should be enough as the logic is the same for all) and all the operators (each operator has a different functionality, so we need to test them all).
+We follow a test-driven development (TDD) approach to ensure robust functionality. Each component is tested individually, and integration tests ensure that filters work as expected across the application.
 
 ### Property Names Unit Testing
 
-- Get the option values for the dropdown and assert the values with the mockup values.
-- Be a able to open the dropdown and select an option, asserting it is stored in the global store.
+- Verify that the dropdown options match the expected values.
+- Ensure selecting an option updates the global store correctly.
 
 ### Operators Unit Testing
 
-- Get the option values for the dropdown and assert the values with the mockup values.
-- Be a able to open the dropdown and select an option, asserting it is stored in the global store.
+- Verify that the dropdown options match the expected values.
+- Ensure selecting an operator updates the global store correctly.
 
 ### Property Values Unit Testing
 
-- Get the option values for the list and assert the values with the mockup values.
-- Be a able to select one option, asserting it is stored in the global store.
-- Be able to select multiple options, asserting they are stored in the global store.
+- Verify that the options in the multiselect list match the expected values.
+- Ensure that selecting single and multiple values updates the global store correctly.
 
 ### Clear Button Unit Testing
 
-- On click of the button, the state of the filters in the global store should be cleared.
+- Verify that clicking the button resets the filters in the global store.
 
 ### Filtered List Integration Testing
 
 For each operator:
 
-- Be able to select a property name, an operator and a property value and assert the result in the list.
-
-- When filters are applied, clicking the clear button will reset the filters in the filter components and the list will display the default state.
+- Verify that selecting a property name, operator, and property values filters the list correctly.
 
 ## UI/UX
 
-I'm not sure if there is some design system in place, I could use some design system like Material UI, but for this simple project I'm going to use css modules for each component and code a bit of css.
+For now, the UI features dropdowns for the filters and checkboxes for the property values. The data is displayed in a table, with plans to move to a card-based design in future iterations.
 
-Ultimately, the mockups are really simple, but I would like to change it a bit. Instead of a list in a table-like structure, I would create a Card component that will have the values of each product (row in the table) and instead of filtering a table, we filter cards. For the filters, I would do an accordion like column on the left side that would show the options for each type of filter. For now, we will use the table for the data as it is simpler to get the functionality working and the dropdowns/multiselect for the filters.
+Note: The table has been replaced with a card-based design.
+
+---
+
+## Project Setup
+
+To set up the project locally, follow these steps:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/miguelclg/product-filter.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd product-filter
+```
+
+3. Install the dependencies using Yarn:
+
+```bash
+yarn install
+```
+
+4. Start the development server:
+
+```bash
+yarn start
+```
+
+5. The application will be available at `http://localhost:3000`
+
+## Testing
+
+Run the test suite
+
+```bash
+yarn test
+```
+
+## Deployment
+
+To deploy the application to GitHub Pages:
+
+1. Add the following property to package.json to specify the homepage:
+
+```
+"homepage": "https://miguelclg.github.io/product-filter"
+```
+
+2. Run the following command to build the project:
+
+```bash
+yarn build
+```
+
+3. Deploy the project:
+
+```bash
+yarn deploy
+```
+
+The deploy script will automatically build a push the changes to the `gh-pages` branch which will make the app available at:
+https://miguelclg.github.io/product-filter/

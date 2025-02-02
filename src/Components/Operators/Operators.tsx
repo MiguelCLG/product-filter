@@ -14,7 +14,7 @@ const Operators: React.FC = () => {
   };
 
   return (
-    <select value={state.operator} onChange={handleChange}>
+    <select className="dropdown" value={state.operator} onChange={handleChange}>
       <option value={EOperatorType.Default}>Select an Operator</option>
       {operators?.map((operator) => (
         <option key={operator.id} value={operator.id}>

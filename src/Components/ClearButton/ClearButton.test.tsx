@@ -20,24 +20,18 @@ describe("ClearButton Component", () => {
   });
 
   it("should render the button with the text 'Clear Filters'", () => {
-    // Render the ClearButton component
     render(<ClearButton />);
 
-    // Assert that the button is rendered with the correct text
     expect(screen.getByRole("button")).toHaveTextContent("Clear Filters");
   });
 
   it("should dispatch the 'CLEAR_FILTERS' action when clicked", () => {
-    // Render the ClearButton component
     render(<ClearButton />);
 
-    // Get the button element
     const button = screen.getByRole("button");
 
-    // Simulate a click event on the button
     fireEvent.click(button);
 
-    // Assert that the dispatch method was called with the correct action
     expect(mockDispatch).toHaveBeenCalledWith({ type: "CLEAR_FILTERS" });
   });
 });

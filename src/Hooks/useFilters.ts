@@ -11,6 +11,9 @@ import {
 import { mappedColumns, mappedOperators } from "../Utils/constants";
 import { EOperatorType } from "../Utils/enums";
 
+// This hook returns the filtered data based on the currently selected filter
+// properties. It also provides the property names, property values, products and
+// operators as separate values to fill in the filter components.
 export const useFilters = () => {
   const { state } = useGlobalStore();
   const [propertyNames, setPropertyNames] = useState<IProperty[]>();
@@ -19,15 +22,19 @@ export const useFilters = () => {
   const [operators, setOperators] = useState<IOperator[]>();
   const [propertyValues, setPropertyValues] = useState<IPropertyValues[]>([]);
 
+  // Fetch property names and products from the datastore and save them in our state
+  // So that the filter components can get this data
   useEffect(() => {
     setPropertyNames(datastore.getProperties());
     setProducts(datastore.getProducts());
-  }, []);
+  }, []); // having no dependencies means it will run once on render
 
+  // Filter the operators and the property values based on the selection of the Property Name dropdown
   useEffect(() => {
-    const { propertyName } = state;
+    // first we map the operators based on the property, using the mappedOperators defined in the constants file
+    const { propertyId } = state;
     if (propertyNames) {
-      const pn = propertyNames.find((p) => p.name === propertyName);
+      const pn = propertyNames.find((p) => p.id === propertyId);
       if (!pn) {
         setOperators([]);
         setPropertyValues([]);
@@ -36,6 +43,7 @@ export const useFilters = () => {
 
       setOperators(mappedOperators[pn?.type]);
 
+      // then we filter the property values based on the property, using reduce to have only unique property values
       var filteredPropertyValues = Object.values(products).reduce(
         (acc, product) => {
           if (
@@ -56,15 +64,14 @@ export const useFilters = () => {
       setPropertyValues(filteredPropertyValues ? filteredPropertyValues : []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.propertyName]);
+  }, [state.propertyId]); // this hook will only run when the propertyId from the store changes
 
+  // filteredData will be used to display the list / cards on the FilteredList Component
+  // we construct an array based on all products with a IFilteredData interface so it is easier to work with
+  // we then filter this array based on the currently selected filters (Property Name, Operator and Property Values)
   const filteredData: IFilteredData[] = useMemo(() => {
     if (!products) return [];
-    const {
-      propertyName,
-      operator,
-      propertyValues: statePropertyValues,
-    } = state;
+    const { propertyId, operator, propertyValues: statePropertyValues } = state;
     const filteredProducts: IFilteredData[] = [];
 
     products?.forEach((product) => {
@@ -91,10 +98,9 @@ export const useFilters = () => {
             ?.value.toString() || "",
       });
     });
-    if (propertyName === "default" || operator === "default")
-      return filteredProducts;
+    if (propertyId === -1 || operator === "default") return filteredProducts;
 
-    const property = mappedColumns[propertyName];
+    const property = mappedColumns[propertyId];
 
     const result = filteredProducts.filter((product) => {
       var value = product[property];
@@ -133,7 +139,7 @@ export const useFilters = () => {
     });
     return result;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, products]);
+  }, [state, products]); // Using a useMemo hook to avoid unnecessary re-renders and only re-render when the state of our global store or products change.
 
   return { filteredData, propertyNames, propertyValues, products, operators };
 };

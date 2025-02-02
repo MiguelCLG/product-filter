@@ -11,7 +11,6 @@ jest.mock("../../Store/GlobalStore");
 jest.mock("../../Hooks/useFilters");
 
 describe("PropertyValues Component", () => {
-  // Mock data for property values
   const mockPropertyValues = [
     { id: 1, value: "Red" },
     { id: 2, value: "Blue" },
@@ -21,13 +20,11 @@ describe("PropertyValues Component", () => {
   ];
 
   beforeEach(() => {
-    // Mocking the global store hook return values
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: { propertyValues: [] },
       dispatch: mockDispatch,
     });
 
-    // Mocking the filters hook return values
     (useFilters as jest.Mock).mockReturnValue({
       propertyValues: mockPropertyValues,
     });
@@ -65,14 +62,14 @@ describe("PropertyValues Component", () => {
       `checkbox-${mockPropertyValues[1].id}`
     ).firstChild as HTMLInputElement;
 
-    fireEvent.click(checkboxRed); // check red checkbox
+    fireEvent.click(checkboxRed);
 
     expect(mockDispatch).toHaveBeenCalledWith({
       type: "SET_PROPERTY_VALUES",
       payload: ["Red"],
     });
 
-    fireEvent.click(checkboxBlue); // check blue checkbox
+    fireEvent.click(checkboxBlue);
 
     expect(mockDispatch).toHaveBeenCalledWith({
       type: "SET_PROPERTY_VALUES",
@@ -83,7 +80,7 @@ describe("PropertyValues Component", () => {
       payload: ["Blue"],
     });
 
-    fireEvent.click(checkboxRed); // uncheck red checkbox
+    fireEvent.click(checkboxRed);
 
     expect(mockDispatch).toHaveBeenCalledWith({
       type: "SET_PROPERTY_VALUES",

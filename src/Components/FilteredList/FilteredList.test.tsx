@@ -7,7 +7,6 @@ import { useFilters } from "../../Hooks/useFilters";
 jest.mock("../../Hooks/useFilters");
 
 describe("FilteredList Component", () => {
-  // Mock data for property names
   const mockPropertyNames = [
     { id: 1, name: "Product Name" },
     { id: 2, name: "Color" },
@@ -16,7 +15,6 @@ describe("FilteredList Component", () => {
     { id: 5, name: "Wireless" },
   ];
 
-  // Mock data for filteredData
   const mockFilteredData = [
     {
       productName: "Product 1",
@@ -46,7 +44,6 @@ describe("FilteredList Component", () => {
   });
 
   it("should render loading when propertyNames is null", () => {
-    // Mock the case where propertyNames is null (loading state)
     (useFilters as jest.Mock).mockReturnValue({
       propertyNames: null,
       filteredData: [],
@@ -54,25 +51,12 @@ describe("FilteredList Component", () => {
 
     render(<FilteredList />);
 
-    // Assert loading is displayed
-    expect(screen.getByText("loading")).toBeInTheDocument();
+    expect(screen.getByText(/loading/)).toBeInTheDocument();
   });
 
-  it("should render table headers based on propertyNames", () => {
-    // Render the component with mock data
+  it("should render cards based on filteredData", () => {
     render(<FilteredList />);
 
-    // Assert that the correct headers are rendered
-    mockPropertyNames.forEach((propertyName) => {
-      expect(screen.getByText(propertyName.name)).toBeInTheDocument();
-    });
-  });
-
-  it("should render table rows based on filteredData", () => {
-    // Render the component with mock data
-    render(<FilteredList />);
-
-    // Assert that the correct data is displayed in the table rows
     mockFilteredData.forEach((item) => {
       expect(screen.getByText(item.productName)).toBeInTheDocument();
       expect(screen.getByText(item.color)).toBeInTheDocument();
@@ -82,12 +66,10 @@ describe("FilteredList Component", () => {
     });
   });
 
-  it("should render the correct number of rows", () => {
-    // Render the component with mock data
+  it("should render the correct number of cards", () => {
     render(<FilteredList />);
 
-    // Assert the correct number of rows (excluding the header)
-    const rows = screen.getAllByRole("row");
-    expect(rows.length).toBe(3); // 1 header row + 2 data rows
+    const cards = screen.getAllByTestId("card");
+    expect(cards.length).toBe(2);
   });
 });

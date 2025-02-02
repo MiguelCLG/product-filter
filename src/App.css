@@ -1,27 +1,79 @@
-.App {
+.AppWrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
   padding: 20px;
 }
-
+.title {
+  text-align: center;
+}
 .filters {
   display: flex;
+  flex-direction: column;
+  min-width: 200px;
   gap: 10px;
-  margin-bottom: 20px;
+  padding: 20px;
 }
-
-table {
+.dropdown {
   width: 100%;
-  border-collapse: collapse;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 50px;
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.card-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px;
+}
+.card {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-th {
-  background-color: #f2f2f2;
+.clear-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.property-values {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.property-values input {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+.clear-button:hover {
+  background-color: #0056b3;
+}
+
+@media screen and (max-width: 768px) {
+  .AppWrapper {
+    flex-direction: column;
+  }
+
+  .card-list {
+    justify-content: center;
+  }
+
+  .filters {
+    min-width: 100%;
+  }
 }

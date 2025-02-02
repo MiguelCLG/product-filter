@@ -1,3 +1,4 @@
+// A few Enums to facilitate the conversion on some data, helpful with tests as well.
 export enum EOperatorType {
   Default = "default",
   Equals = "equals",

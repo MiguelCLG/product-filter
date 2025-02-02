@@ -2,6 +2,7 @@
   "name": "salsify-coding-exercise",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://miguelclg.github.io/product-filter",
   "main": "src/index.tsx",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
@@ -50,6 +51,7 @@
     "eslint-config-react": "^1.1.7",
     "eslint-config-react-app": "^7.0.1",
     "gh-pages": "^6.3.0",
+    "node-sass": "^9.0.0",
     "typescript": "^5.7.3",
     "web-vitals": "^4.2.4"
   }

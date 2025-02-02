@@ -23,12 +23,14 @@ describe("PropertyNames Component", () => {
   ];
 
   beforeEach(() => {
-    // Mocking the global store hook return values
+    // Mocking the global store to return mocked values before each test
 
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: { propertyName: EPropertyNames.Default },
       dispatch: mockDispatch,
     });
+
+    // Mocking the useFilters hook before each test
     (useFilters as jest.Mock).mockReturnValue({
       propertyNames: mockPropertyNames,
     });
@@ -39,49 +41,41 @@ describe("PropertyNames Component", () => {
   });
 
   it("should render dropdown options based on propertyNames", () => {
-    // Render the component
     render(<PropertyNames />);
 
-    // Get the dropdown options
-    const selectElement = screen.getByRole("combobox");
     const options = screen.getAllByRole("option");
-
-    // Assert the number of options (including the default one)
     expect(options.length).toBe(6);
 
-    // Assert the values and content of the options
-    expect((options[0] as HTMLOptionElement).value).toBe(
-      EPropertyNames.Default
-    );
+    expect((options[0] as HTMLOptionElement).value).toBe("-1"); // default state
     expect(options[0] as HTMLOptionElement).toHaveTextContent(
       "Select a Property Name"
     );
     expect((options[1] as HTMLOptionElement).value).toBe(
-      mockPropertyNames[0].name
+      mockPropertyNames[0].id.toString()
     );
     expect(options[1] as HTMLOptionElement).toHaveTextContent(
       mockPropertyNames[0].name
     );
     expect((options[2] as HTMLOptionElement).value).toBe(
-      mockPropertyNames[1].name
+      mockPropertyNames[1].id.toString()
     );
     expect(options[2] as HTMLOptionElement).toHaveTextContent(
       mockPropertyNames[1].name
     );
     expect((options[3] as HTMLOptionElement).value).toBe(
-      mockPropertyNames[2].name
+      mockPropertyNames[2].id.toString()
     );
     expect(options[3] as HTMLOptionElement).toHaveTextContent(
       mockPropertyNames[2].name
     );
     expect((options[4] as HTMLOptionElement).value).toBe(
-      mockPropertyNames[3].name
+      mockPropertyNames[3].id.toString()
     );
     expect(options[4] as HTMLOptionElement).toHaveTextContent(
       mockPropertyNames[3].name
     );
     expect((options[5] as HTMLOptionElement).value).toBe(
-      mockPropertyNames[4].name
+      mockPropertyNames[4].id.toString()
     );
     expect(options[5] as HTMLOptionElement).toHaveTextContent(
       mockPropertyNames[4].name
@@ -89,21 +83,18 @@ describe("PropertyNames Component", () => {
   });
 
   it("should update global store when selecting an option", () => {
-    // Render the component
     render(<PropertyNames />);
 
-    // Get the dropdown element
     const selectElement = screen.getByRole("combobox");
 
-    // Simulate changing the dropdown value
     fireEvent.change(selectElement, {
-      target: { value: EPropertyNames.ProductName },
+      target: { value: 1 },
     });
 
-    // Assert that the dispatch method was called with the correct actions
+    // checking if we sent the right actions with the right payload to the global store
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: "SET_PROPERTY_NAME",
-      payload: EPropertyNames.ProductName,
+      type: "SET_PROPERTY_ID",
+      payload: 1,
     });
     expect(mockDispatch).toHaveBeenCalledWith({
       type: "SET_OPERATOR",
@@ -114,8 +105,7 @@ describe("PropertyNames Component", () => {
       payload: [],
     });
     waitFor(() => {
-      expect(selectElement).toHaveValue(EPropertyNames.ProductName);
+      expect(selectElement).toHaveValue(1);
     });
-    // Assert the selected value in the dropdown
   });
 });

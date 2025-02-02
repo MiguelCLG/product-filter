@@ -1,3 +1,6 @@
+import { ReactNode } from "react";
+import { EOperatorType } from "./enums";
+
 export interface IPropertyValue {
   property_id: number;
   value: string | number | boolean;
@@ -30,4 +33,14 @@ export interface IFilteredData {
 export interface IPropertyValues {
   id: string;
   value: string;
+}
+
+export interface IGlobalStoreProviderProps {
+  children: ReactNode;
+}
+
+export interface IFilterState {
+  propertyId: number;
+  operator: EOperatorType;
+  propertyValues: string[];
 }

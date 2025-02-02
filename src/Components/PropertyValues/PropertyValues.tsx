@@ -21,7 +21,7 @@ const PropertyValues: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="property-values">
       {propertyValues?.map(
         (property) =>
           property && (

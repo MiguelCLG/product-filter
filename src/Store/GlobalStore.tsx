@@ -1,57 +1,39 @@
-// context/GlobalStoreContext.tsx
-import React, { createContext, ReactNode, useContext, useReducer } from "react";
-import { EOperatorType, EPropertyNames } from "../Utils/enums";
+import React, { createContext, useContext, useReducer } from "react";
+import { EOperatorType } from "../Utils/enums";
+import { IFilterState, IGlobalStoreProviderProps } from "../Utils/interfaces";
 
-interface FilterState {
-  propertyName: EPropertyNames;
-  operator: EOperatorType;
-  propertyValues: string[];
-}
-
+// Typing the actions for the reducer
+// This defines what actions can be performed
 type FilterAction =
-  | { type: "SET_PROPERTY_NAME"; payload: EPropertyNames }
+  | { type: "SET_PROPERTY_ID"; payload: number }
   | { type: "SET_OPERATOR"; payload: EOperatorType }
   | { type: "SET_PROPERTY_VALUES"; payload: string[] }
   | { type: "CLEAR_FILTERS" };
 
-const initialState: FilterState = {
-  propertyName: EPropertyNames.Default,
+// Initial state of the reducer, defines default values when the store is initialized or when the filters are cleared
+const initialState: IFilterState = {
+  propertyId: -1,
   operator: EOperatorType.Default,
   propertyValues: [],
 };
 
-// Create context with explicit type
+// Using react context to create the global store, declaring its type explicitly by adding a state variable and a dispatch function
 const GlobalStoreContext = createContext<{
-  state: FilterState;
+  state: IFilterState;
   dispatch: React.Dispatch<FilterAction>;
 }>({
   state: initialState,
   dispatch: () => null,
 });
 
-// Define props type for the provider
-interface GlobalStoreProviderProps {
-  children: ReactNode;
-}
-
-// Create a named provider component
-export const GlobalStoreProvider = ({ children }: GlobalStoreProviderProps) => {
-  const [state, dispatch] = useReducer(filterReducer, initialState);
-
-  return (
-    <GlobalStoreContext.Provider value={{ state, dispatch }}>
-      {children}
-    </GlobalStoreContext.Provider>
-  );
-};
-
+// defines the reducer function that will be used to update the state depending on the action
 const filterReducer = (
-  state: FilterState,
+  state: IFilterState,
   action: FilterAction
-): FilterState => {
+): IFilterState => {
   switch (action.type) {
-    case "SET_PROPERTY_NAME":
-      return { ...state, propertyName: action.payload };
+    case "SET_PROPERTY_ID":
+      return { ...state, propertyId: action.payload };
     case "SET_OPERATOR":
       return { ...state, operator: action.payload };
     case "SET_PROPERTY_VALUES":
@@ -61,6 +43,19 @@ const filterReducer = (
     default:
       return state;
   }
+};
+
+// Provider creation to wrap around the App component so that any children component can access the store
+export const GlobalStoreProvider = ({
+  children,
+}: IGlobalStoreProviderProps) => {
+  const [state, dispatch] = useReducer(filterReducer, initialState);
+
+  return (
+    <GlobalStoreContext.Provider value={{ state, dispatch }}>
+      {children}
+    </GlobalStoreContext.Provider>
+  );
 };
 
 export const useGlobalStore = () => useContext(GlobalStoreContext);

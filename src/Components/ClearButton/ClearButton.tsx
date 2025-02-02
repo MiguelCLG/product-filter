@@ -10,7 +10,11 @@ const ClearButton: React.FC = () => {
   };
 
   return (
-    <button data-testid="clear-button" onClick={handleClick}>
+    <button
+      className="clear-button"
+      data-testid="clear-button"
+      onClick={handleClick}
+    >
       Clear Filters
     </button>
   );

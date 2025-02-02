@@ -99,7 +99,7 @@ describe("useFilters Hook", () => {
 
   it("should return all products when propertyName is Default", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
-      state: { propertyName: EPropertyNames.Default },
+      state: { propertyId: -1 },
       dispatch: mockDispatch,
     });
 
@@ -110,7 +110,7 @@ describe("useFilters Hook", () => {
   it("should return all with weight greater than 10", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
-        propertyName: "weight (oz)",
+        propertyId: 2,
         operator: EOperatorType.GreaterThan,
         propertyValues: ["10"],
       },
@@ -141,7 +141,7 @@ describe("useFilters Hook", () => {
   it("should return all with weight less than 20", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
-        propertyName: "weight (oz)",
+        propertyId: 2,
         operator: EOperatorType.LessThan,
         propertyValues: ["20"],
       },
@@ -165,7 +165,7 @@ describe("useFilters Hook", () => {
   it("should return all that have any value", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
-        propertyName: "wireless",
+        propertyId: 4,
         operator: EOperatorType.Any,
         propertyValues: [],
       },
@@ -195,7 +195,7 @@ describe("useFilters Hook", () => {
   it("should return all that have no value", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
-        propertyName: "wireless",
+        propertyId: 4,
         operator: EOperatorType.None,
         propertyValues: ["20"],
       },
@@ -219,7 +219,7 @@ describe("useFilters Hook", () => {
   it("should return if value exactly matches one of several values", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
-        propertyName: "wireless",
+        propertyId: 4,
         operator: EOperatorType.In,
         propertyValues: ["true", "false"],
       },
@@ -249,7 +249,7 @@ describe("useFilters Hook", () => {
   it("should return value contains the specified text", () => {
     (useGlobalStore as jest.Mock).mockReturnValue({
       state: {
-        propertyName: "Product Name",
+        propertyId: 0,
         operator: EOperatorType.Contains,
         propertyValues: ["Product 1", "Product 2"],
       },
@@ -276,7 +276,6 @@ describe("useFilters Hook", () => {
     ];
     waitFor(() => expect(result.current.filteredData).toEqual(expectedData));
   });
-
   it("should return filtered data, property names, property values, and operators", () => {
     const { result } = renderHook(() => useFilters());
 

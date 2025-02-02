@@ -16,9 +16,9 @@ import { EOperatorType } from "../Utils/enums";
 // operators as separate values to fill in the filter components.
 export const useFilters = () => {
   const { state } = useGlobalStore();
+
   const [propertyNames, setPropertyNames] = useState<IProperty[]>();
   const [products, setProducts] = useState<IProduct[]>();
-
   const [operators, setOperators] = useState<IOperator[]>();
   const [propertyValues, setPropertyValues] = useState<IPropertyValues[]>([]);
 
@@ -43,7 +43,11 @@ export const useFilters = () => {
 
       setOperators(mappedOperators[pn?.type]);
 
-      // then we filter the property values based on the property, using reduce to have only unique property values
+      // then we filter the property values based on the property,
+      // using reduce to have only unique property values
+      // reduce has an accumulator, that we push to it the property values
+      // with the corresponding property_id, making sure
+      // there isn't the same value in the accumulator
       var filteredPropertyValues = Object.values(products).reduce(
         (acc, product) => {
           if (
@@ -98,12 +102,13 @@ export const useFilters = () => {
             ?.value.toString() || "",
       });
     });
+
     if (propertyId === -1 || operator === "default") return filteredProducts;
 
-    const property = mappedColumns[propertyId];
+    const propertyName = mappedColumns[propertyId];
 
     const result = filteredProducts.filter((product) => {
-      var value = product[property];
+      var value = product[propertyName];
       switch (operator) {
         case EOperatorType.Any:
           return value && value.length > 0;
